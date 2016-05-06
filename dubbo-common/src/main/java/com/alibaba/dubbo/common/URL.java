@@ -134,7 +134,7 @@ public final class URL implements Serializable {
     }
 	
 	public URL(String protocol, String host, int port, String path, Map<String, String> parameters) {
-		this(protocol, null, null, host, port, path, parameters);
+		this(protocol, null, null, host, port, path, parameters); // {owner=world, side=provider, application=hello-world-app, methods=findEmps, dubbo=2.0.0, pid=3624, interface=xingfandubbo.service.DemoService, generic=false, anyhost=true, timestamp=1462418229525}
 	}
 	
 	public URL(String protocol, String username, String password, String host, int port, String path) {
@@ -914,7 +914,7 @@ public final class URL implements Serializable {
         }
 
         Map<String, String> map = new HashMap<String, String>(getParameters());
-        map.put(key, value);
+        map.put(key, value); // dubbo%3A%2F%2F192.168.21.14%3A20880%2Fxingfandubbo.service.DemoService%3Fanyhost%3Dtrue%26application%3Dhello-world-app%26dubbo%3D2.0.0%26generic%3Dfalse%26interface%3Dxingfandubbo.service.DemoService%26methods%3DfindEmps%26owner%3Dworld%26pid%3D3624%26side%3Dprovider%26timestamp%3D1462418229525
         return new URL(protocol, username, password, host, port, path, map);
     }
     

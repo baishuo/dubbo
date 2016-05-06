@@ -284,7 +284,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
             doExportUrlsFor1Protocol(protocolConfig, registryURLs);
         }
     }
-
+    // <dubbo:protocol name="dubbo" port="20880" id="dubbo" />
     private void doExportUrlsFor1Protocol(ProtocolConfig protocolConfig, List<URL> registryURLs) {
         String name = protocolConfig.getName();
         if (name == null || name.length() == 0) {
@@ -450,7 +450,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
         String contextPath = protocolConfig.getContextpath();
         if ((contextPath == null || contextPath.length() == 0) && provider != null) {
             contextPath = provider.getContextpath();
-        }
+        } // path = xingfandubbo.service.DemoService
         URL url = new URL(name, host, port, (contextPath == null || contextPath.length() == 0 ? "" : contextPath + "/") + path, map);
 
         if (ExtensionLoader.getExtensionLoader(ConfiguratorFactory.class)
@@ -482,9 +482,9 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
                         }
                         if (logger.isInfoEnabled()) {
                             logger.info("Register dubbo service " + interfaceClass.getName() + " url " + url + " to registry " + registryURL);
-                        }
+                        } // ref: xingfandubbo.service.DemoServiceImpl  ,interface xingfandubbo.service.DemoService
                         Invoker<?> invoker = proxyFactory.getInvoker(ref, (Class) interfaceClass, registryURL.addParameterAndEncoded(Constants.EXPORT_KEY, url.toFullString()));
-
+                        // registry://224.5.6.7:1234/com.alibaba.dubbo.registry.RegistryService?application=hello-world-app&dubbo=2.0.0&export=dubbo%3A%2F%2F192.168.21.14%3A20880%2Fxingfandubbo.service.DemoService%3Fanyhost%3Dtrue%26application%3Dhello-world-app%26dubbo%3D2.0.0%26generic%3Dfalse%26interface%3Dxingfandubbo.service.DemoService%26methods%3DfindEmps%26owner%3Dworld%26pid%3D3624%26side%3Dprovider%26timestamp%3D1462418229525&owner=world&pid=3624&registry=multicast&timestamp=1462417956580
                         Exporter<?> exporter = protocol.export(invoker);
                         exporters.add(exporter);
                     }
@@ -501,12 +501,12 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
 
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    private void exportLocal(URL url) {
+    private void exportLocal(URL url) {// url.getProtocol() = dubbo
         if (!Constants.LOCAL_PROTOCOL.equalsIgnoreCase(url.getProtocol())) {
             URL local = URL.valueOf(url.toFullString())
                     .setProtocol(Constants.LOCAL_PROTOCOL)
                     .setHost(NetUtils.LOCALHOST)
-                    .setPort(0);
+                    .setPort(0); // injvm://127.0.0.1/xingfandubbo.service.DemoService?anyhost=true&application=hello-world-app&dubbo=2.0.0&generic=false&interface=xingfandubbo.service.DemoService&methods=findEmps&owner=world&pid=3624&side=provider&timestamp=1462418229525
             Exporter<?> exporter = protocol.export(
                     proxyFactory.getInvoker(ref, (Class) interfaceClass, local));
             exporters.add(exporter);

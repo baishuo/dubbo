@@ -320,7 +320,7 @@ public class ExtensionLoader<T> {
 	                holder.set(instance);
 	            }
 	        }
-		}
+		} // com.alibaba.dubbo.common.extension.factory.SpiExtensionFactory
 		return (T) instance;
 	}
 	
@@ -591,7 +591,7 @@ public class ExtensionLoader<T> {
         loadFile(extensionClasses, DUBBO_INTERNAL_DIRECTORY);
         loadFile(extensionClasses, DUBBO_DIRECTORY);
         loadFile(extensionClasses, SERVICES_DIRECTORY);
-        return extensionClasses;
+        return extensionClasses; // 有spring和spi 两个key
     }
     
     private void loadFile(Map<String, Class<?>> extensionClasses, String dir) {
@@ -606,7 +606,7 @@ public class ExtensionLoader<T> {
             }
             if (urls != null) {
                 while (urls.hasMoreElements()) {
-                    java.net.URL url = urls.nextElement();
+                    java.net.URL url = urls.nextElement(); // file:/D:/workspace/dubbo/dubbo-common/target/classes/META-INF/dubbo/internal/com.alibaba.dubbo.common.extension.ExtensionFactory
                     try {
                         BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), "utf-8"));
                         try {
@@ -663,7 +663,7 @@ public class ExtensionLoader<T> {
                                                     String[] names = NAME_SEPARATOR.split(name);
                                                     if (names != null && names.length > 0) {
                                                         Activate activate = clazz.getAnnotation(Activate.class);
-                                                        if (activate != null) {
+                                                        if (activate != null) { // 注意是不等于
                                                             cachedActivates.put(names[0], activate);
                                                         }
                                                         for (String n : names) {
@@ -717,7 +717,7 @@ public class ExtensionLoader<T> {
     
     @SuppressWarnings("unchecked")
     private T createAdaptiveExtension() {
-        try {
+        try { // 调用 AdaptiveExtensionFactory 的构造函数
             return injectExtension((T) getAdaptiveExtensionClass().newInstance());
         } catch (Exception e) {
             throw new IllegalStateException("Can not create adaptive extenstion " + type + ", cause: " + e.getMessage(), e);
@@ -733,7 +733,7 @@ public class ExtensionLoader<T> {
     }
     
     private Class<?> createAdaptiveExtensionClass() {
-        String code = createAdaptiveExtensionClassCode();
+        String code = createAdaptiveExtensionClassCode();// 创建了Protocol$Adpative的文字内容
         ClassLoader classLoader = findClassLoader();
         com.alibaba.dubbo.common.compiler.Compiler compiler = ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.common.compiler.Compiler.class).getAdaptiveExtension();
         return compiler.compile(code, classLoader);
