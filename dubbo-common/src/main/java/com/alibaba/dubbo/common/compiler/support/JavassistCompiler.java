@@ -88,7 +88,7 @@ public class JavassistCompiler extends AbstractCompiler {
             }
             cls = pool.makeClass(name, pool.get(extendClass));
         } else {
-            cls = pool.makeClass(name);
+            cls = pool.makeClass(name); // javassist.CtNewClass
         }
         matcher = IMPLEMENTS_PATTERN.matcher(source);
         if (matcher.find()) {

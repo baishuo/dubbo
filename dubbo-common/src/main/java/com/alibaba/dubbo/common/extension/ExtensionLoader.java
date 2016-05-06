@@ -308,7 +308,7 @@ public class ExtensionLoader<T> {
 		}
 		Holder<Object> holder = cachedInstances.get(name);
 		if (holder == null) {
-		    cachedInstances.putIfAbsent(name, new Holder<Object>());
+		    cachedInstances.putIfAbsent(name, new Holder<Object>()); // {javassist=com.alibaba.dubbo.common.utils.Holder@797b0699}
 		    holder = cachedInstances.get(name);
 		}
 		Object instance = holder.get();
@@ -316,7 +316,7 @@ public class ExtensionLoader<T> {
 		    synchronized (holder) {
 	            instance = holder.get();
 	            if (instance == null) {
-	                instance = createExtension(name);
+	                instance = createExtension(name); // JavassistCompiler
 	                holder.set(instance);
 	            }
 	        }
@@ -452,7 +452,7 @@ public class ExtensionLoader<T> {
                     instance = cachedAdaptiveInstance.get();
                     if (instance == null) {
                         try {
-                            instance = createAdaptiveExtension();
+                            instance = createAdaptiveExtension(); // com.alibaba.dubbo.rpc.Protocol$Adpative@30c93896
                             cachedAdaptiveInstance.set(instance);
                         } catch (Throwable t) {
                             createAdaptiveInstanceError = t;
@@ -530,7 +530,7 @@ public class ExtensionLoader<T> {
                         Class<?> pt = method.getParameterTypes()[0];
                         try {
                             String property = method.getName().length() > 3 ? method.getName().substring(3, 4).toLowerCase() + method.getName().substring(4) : "";
-                            Object object = objectFactory.getExtension(pt, property);
+                            Object object = objectFactory.getExtension(pt, property); // getExtension
                             if (object != null) {
                                 method.invoke(instance, object);
                             }
@@ -717,7 +717,7 @@ public class ExtensionLoader<T> {
     
     @SuppressWarnings("unchecked")
     private T createAdaptiveExtension() {
-        try { // 调用 AdaptiveExtensionFactory 的构造函数
+        try { // 调用 AdaptiveExtensionFactory  AdaptiveCompiler 的构造函数
             return injectExtension((T) getAdaptiveExtensionClass().newInstance());
         } catch (Exception e) {
             throw new IllegalStateException("Can not create adaptive extenstion " + type + ", cause: " + e.getMessage(), e);

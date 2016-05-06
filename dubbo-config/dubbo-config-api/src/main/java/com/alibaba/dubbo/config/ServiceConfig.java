@@ -57,9 +57,9 @@ import com.alibaba.dubbo.rpc.support.ProtocolUtils;
 public class ServiceConfig<T> extends AbstractServiceConfig {
 
     private static final long   serialVersionUID = 3033787999037024738L;
-
+    // com.alibaba.dubbo.rpc.Protocol$Adpative@30c93896
     private static final Protocol protocol = ExtensionLoader.getExtensionLoader(Protocol.class).getAdaptiveExtension();
-    
+    // ProxyFactory$Adpative
     private static final ProxyFactory proxyFactory = ExtensionLoader.getExtensionLoader(ProxyFactory.class).getAdaptiveExtension();
 
     private static final Map<String, Integer> RANDOM_PORT_MAP = new HashMap<String, Integer>();

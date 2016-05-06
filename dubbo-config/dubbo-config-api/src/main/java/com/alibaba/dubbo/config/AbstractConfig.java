@@ -173,7 +173,7 @@ public abstract class AbstractConfig implements Serializable {
                                 getter = null;
                             }
                         }
-                        if (getter != null) {
+                        if (getter != null) { // com.alibaba.dubbo.config.ProviderConfig.isDefault()
                             if (getter.invoke(config, new Object[0]) == null) {
                                 if (config.getId() != null && config.getId().length() > 0) {
                                     value = ConfigUtils.getProperty(prefix + config.getId() + "." + property);
