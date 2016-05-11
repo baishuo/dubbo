@@ -133,7 +133,7 @@ public abstract class AbstractConfig implements Serializable {
             }
         }
     }
-
+    // 每种config，不同的method，反射调用这些method，更新
     protected static void appendProperties(AbstractConfig config) {
         if (config == null) {
             return;
@@ -142,7 +142,7 @@ public abstract class AbstractConfig implements Serializable {
         Method[] methods = config.getClass().getMethods();
         for (Method method : methods) {
             try {
-                String name = method.getName();
+                String name = method.getName();  System.out.println("name:" + name);
                 if (name.length() > 3 && name.startsWith("set") && Modifier.isPublic(method.getModifiers()) 
                         && method.getParameterTypes().length == 1 && isPrimitive(method.getParameterTypes()[0])) {
                     String property = StringUtils.camelToSplitName(name.substring(3, 4).toLowerCase() + name.substring(4), "-");
@@ -156,7 +156,7 @@ public abstract class AbstractConfig implements Serializable {
                         }
                     }
                     if (value == null || value.length() == 0) {
-                        String pn = prefix + property;
+                        String pn = prefix + property; // dubbo.application.default
                         value = System.getProperty(pn);
                         if(! StringUtils.isBlank(value)) {
                             logger.info("Use System Property " + pn + " to config dubbo");
@@ -190,7 +190,7 @@ public abstract class AbstractConfig implements Serializable {
                                 
                             }
                         }
-                    }
+                    } // setOwner
                     if (value != null && value.length() > 0) {
                         method.invoke(config, new Object[] {convertPrimitive(method.getParameterTypes()[0], value)});
                     }
@@ -262,7 +262,7 @@ public abstract class AbstractConfig implements Serializable {
                         if (prefix != null && prefix.length() > 0) {
                             key = prefix + "." + key;
                         }
-                        parameters.put(key, str);
+                        parameters.put(key, str); // {owner=world, side=provider, application=hello-world-app, dubbo=2.0.0, pid=9772, generic=false, anyhost=true, timestamp=1462859484960}
                     } else if (parameter != null && parameter.required()) {
                         throw new IllegalStateException(config.getClass().getSimpleName() + "." + key + " == null");
                     }

@@ -157,19 +157,19 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
             throw new IllegalStateException("<dubbo:service interface=\"\" /> interface not allow null!");
         }
         checkDefault();
-        if (provider != null) {
-            if (application == null) {
+        if (provider != null) { // <dubbo:provider />
+            if (application == null) { // <dubbo:application name="hello-world-app" id="hello-world-app" />
                 application = provider.getApplication();
             }
             if (module == null) {
                 module = provider.getModule();
             }
-            if (registries == null) {
+            if (registries == null) { // [<dubbo:registry address="multicast://224.5.6.7:1234" id="com.alibaba.dubbo.config.RegistryConfig" />]
                 registries = provider.getRegistries();
             }
             if (monitor == null) {
                 monitor = provider.getMonitor();
-            }
+            } // [<dubbo:protocol name="dubbo" port="20880" id="dubbo" />]
             if (protocols == null) {
                 protocols = provider.getProtocols();
             }
@@ -189,14 +189,14 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
             if (monitor == null) {
                 monitor = application.getMonitor();
             }
-        }
+        } // xingfandubbo.service.DemoServiceImpl
         if (ref instanceof GenericService) {
             interfaceClass = GenericService.class;
             if (StringUtils.isEmpty(generic)) {
                 generic = Boolean.TRUE.toString();
             }
         } else {
-            try {
+            try { // xingfandubbo.service.DemoService
                 interfaceClass = Class.forName(interfaceName, true, Thread.currentThread()
                         .getContextClassLoader());
             } catch (ClassNotFoundException e) {
@@ -206,9 +206,9 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
             checkRef();
             generic = Boolean.FALSE.toString();
         }
-        if(local !=null){
+        if(local !=null){ // 如果是本地服务
             if("true".equals(local)){
-                local=interfaceName+"Local";
+                local=interfaceName+"Local"; // 如果是本地服务在interfaceName属性后面加上Local
             }
             Class<?> localClass;
             try {
@@ -220,7 +220,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
                 throw new IllegalStateException("The local implemention class " + localClass.getName() + " not implement interface " + interfaceName);
             }
         }
-        if(stub !=null){
+        if(stub !=null){ //如果是远程服务
             if("true".equals(stub)){
                 stub=interfaceName+"Stub";
             }
@@ -278,7 +278,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
     }
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    private void doExportUrls() {
+    private void doExportUrls() { //将注册的所有url匹配上对应的协议在服务端暴露出来
         List<URL> registryURLs = loadRegistries(true);
         for (ProtocolConfig protocolConfig : protocols) {
             doExportUrlsFor1Protocol(protocolConfig, registryURLs);
@@ -286,7 +286,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
     }
     // <dubbo:protocol name="dubbo" port="20880" id="dubbo" />
     private void doExportUrlsFor1Protocol(ProtocolConfig protocolConfig, List<URL> registryURLs) {
-        String name = protocolConfig.getName();
+        String name = protocolConfig.getName(); //如果没配置protocol则默认使用dubbo协议
         if (name == null || name.length() == 0) {
             name = "dubbo";
         }
@@ -307,11 +307,11 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
                 if (registryURLs != null && registryURLs.size() > 0) {
                     for (URL registryURL : registryURLs) {
                         try {
-                            Socket socket = new Socket();
+                            Socket socket = new Socket(); //创建socket，连接到注册中心  
                             try {
                                 SocketAddress addr = new InetSocketAddress(registryURL.getHost(), registryURL.getPort());
-                                socket.connect(addr, 1000);
-                                host = socket.getLocalAddress().getHostAddress();
+                                socket.connect(addr, 1000); // 连接到注册中心
+                                host = socket.getLocalAddress().getHostAddress(); //获取服务所在主机地址
                                 break;
                             } finally {
                                 try {
@@ -328,7 +328,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
                 }
             }
         }
-
+        //获取协议接口号
         Integer port = protocolConfig.getPort();
         if (provider != null && (port == null || port == 0)) {
             port = provider.getPort();
@@ -345,7 +345,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
             }
             logger.warn("Use random available port(" + port + ") for protocol " + name);
         }
-
+        //获取application、module、provider、protocol、exporter、registries、monitor所有属性
         Map<String, String> map = new HashMap<String, String>();
         if (anyhost) {
             map.put(Constants.ANYHOST_KEY, "true");
@@ -427,7 +427,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
             }
 
             String[] methods = Wrapper.getWrapper(interfaceClass).getMethodNames();
-            if(methods.length == 0) {
+            if(methods.length == 0) { // [findEmps]
                 logger.warn("NO method found in service interface " + interfaceClass.getName());
                 map.put("methods", Constants.ANY_VALUE);
             }
@@ -465,7 +465,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
 
             //配置不是remote的情况下做本地暴露 (配置为remote，则表示只暴露远程服务)
             if (!Constants.SCOPE_REMOTE.toString().equalsIgnoreCase(scope)) {
-                exportLocal(url);
+                exportLocal(url); // dubbo://192.168.21.14:20880/xingfandubbo.service.DemoService?anyhost=true&application=hello-world-app&dubbo=2.0.0&generic=false&interface=xingfandubbo.service.DemoService&methods=findEmps&owner=world&pid=9772&side=provider&timestamp=1462859484960
             }
             //如果配置不是local则暴露为远程服务.(配置为local，则表示只暴露远程服务)
             if (! Constants.SCOPE_LOCAL.toString().equalsIgnoreCase(scope) ){
@@ -474,7 +474,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
                 }
                 if (registryURLs != null && registryURLs.size() > 0
                         && url.getParameter("register", true)) {
-                    for (URL registryURL : registryURLs) {
+                    for (URL registryURL : registryURLs) { // [registry://224.5.6.7:1234/com.alibaba.dubbo.registry.RegistryService?application=hello-world-app&dubbo=2.0.0&owner=world&pid=11292&registry=multicast&timestamp=1462866098597]
                         url = url.addParameterIfAbsent("dynamic", registryURL.getParameter("dynamic"));
                         URL monitorUrl = loadMonitor(registryURL);
                         if (monitorUrl != null) {
@@ -507,9 +507,9 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
                     .setProtocol(Constants.LOCAL_PROTOCOL)
                     .setHost(NetUtils.LOCALHOST)
                     .setPort(0); // injvm://127.0.0.1/xingfandubbo.service.DemoService?anyhost=true&application=hello-world-app&dubbo=2.0.0&generic=false&interface=xingfandubbo.service.DemoService&methods=findEmps&owner=world&pid=3624&side=provider&timestamp=1462418229525
-            Exporter<?> exporter = protocol.export(
-                    proxyFactory.getInvoker(ref, (Class) interfaceClass, local));
-            exporters.add(exporter);
+            Exporter<?> exporter = protocol.export( //根据协议将invoker暴露成exporter，具体过程是创建一个ExchangeServer，它会绑定一个ServerSocket到配置端口---> ProtocolListenerWrapper
+                    proxyFactory.getInvoker(ref, (Class) interfaceClass, local)); // ProxyFactory$Adpative.getInvoker(Object, Class, URL) ---> JavassistProxyFactory.getInvoker
+            exporters.add(exporter);//将创建的exporter放进链表便于管理 
             logger.info("Export dubbo service " + interfaceClass.getName() +" to local registry");
         }
     }

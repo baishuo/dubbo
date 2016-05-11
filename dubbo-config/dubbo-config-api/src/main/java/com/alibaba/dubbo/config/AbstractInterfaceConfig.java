@@ -198,7 +198,7 @@ public abstract class AbstractInterfaceConfig extends AbstractMethodConfig {
                 }
             }
         }
-        return registryList;
+        return registryList; // [registry://224.5.6.7:1234/com.alibaba.dubbo.registry.RegistryService?application=hello-world-app&dubbo=2.0.0&owner=world&pid=9772&registry=multicast&timestamp=1462849864922]
     }
     
     protected URL loadMonitor(URL registryURL) {

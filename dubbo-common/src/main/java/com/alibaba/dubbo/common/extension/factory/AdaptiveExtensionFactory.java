@@ -39,7 +39,7 @@ public class AdaptiveExtensionFactory implements ExtensionFactory {
         for (String name : loader.getSupportedExtensions()) {
             list.add(loader.getExtension(name)); // 每个loader里面有一个holder
         }
-        factories = Collections.unmodifiableList(list);
+        factories = Collections.unmodifiableList(list); // 返回的是 SpiExtensionFactory@4808bc9b, SpringExtensionFactory
     }
 
     public <T> T getExtension(Class<T> type, String name) {
