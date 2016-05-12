@@ -552,7 +552,7 @@ public class ExtensionLoader<T> {
 	        throw new IllegalArgumentException("Extension type == null");
 	    if (name == null)
 	        throw new IllegalArgumentException("Extension name == null");
-	    Class<?> clazz = getExtensionClasses().get(name);
+	    Class<?> clazz = getExtensionClasses().get(name); // com.alibaba.dubbo.rpc.protocol.dubbo.DubboCountCodec
 	    if (clazz == null)
 	        throw new IllegalStateException("No such extension \"" + name + "\" for " + type.getName() + "!");
 	    return clazz;

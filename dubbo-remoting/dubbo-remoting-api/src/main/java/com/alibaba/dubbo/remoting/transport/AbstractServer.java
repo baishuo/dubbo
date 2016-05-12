@@ -60,7 +60,7 @@ public abstract class AbstractServer extends AbstractEndpoint implements Server 
         String host = url.getParameter(Constants.ANYHOST_KEY, false) 
                         || NetUtils.isInvalidLocalHost(getUrl().getHost()) 
                         ? NetUtils.ANYHOST : getUrl().getHost();
-        bindAddress = new InetSocketAddress(host, getUrl().getPort());
+        bindAddress = new InetSocketAddress(host, getUrl().getPort()); // /0.0.0.0:20880
         this.accepts = url.getParameter(Constants.ACCEPTS_KEY, Constants.DEFAULT_ACCEPTS);
         this.idleTimeout = url.getParameter(Constants.IDLE_TIMEOUT_KEY, Constants.DEFAULT_IDLE_TIMEOUT);
         try {
