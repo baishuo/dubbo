@@ -519,7 +519,7 @@ public class ExtensionLoader<T> {
                     type + ")  could not be instantiated: " + t.getMessage(), t);
         }
     }
-    
+    // 注入property后返回原来的instance
     private T injectExtension(T instance) {
         try {
             if (objectFactory != null) {
@@ -531,7 +531,7 @@ public class ExtensionLoader<T> {
                         try {
                             String property = method.getName().length() > 3 ? method.getName().substring(3, 4).toLowerCase() + method.getName().substring(4) : "";
                             Object object = objectFactory.getExtension(pt, property); // getExtension
-                            if (object != null) {
+                            if (object != null) { System.out.println("**injectExtension**:" + method.getName() + "|" + property);
                                 method.invoke(instance, object);
                             }
                         } catch (Exception e) {
@@ -632,7 +632,7 @@ public class ExtensionLoader<T> {
                                             }
                                             if (clazz.isAnnotationPresent(Adaptive.class)) {
                                                 if(cachedAdaptiveClass == null) {
-                                                    cachedAdaptiveClass = clazz;
+                                                    cachedAdaptiveClass = clazz;System.out.println("**Adaptive_clazz:" + clazz.getName());
                                                 } else if (! cachedAdaptiveClass.equals(clazz)) {
                                                     throw new IllegalStateException("More than 1 adaptive class found: "
                                                             + cachedAdaptiveClass.getClass().getName()
@@ -648,7 +648,7 @@ public class ExtensionLoader<T> {
                                                     }
                                                     wrappers.add(clazz);
                                                 } catch (NoSuchMethodException e) {
-                                                    clazz.getConstructor();
+                                                    clazz.getConstructor();System.out.println("扩展点具体实现对象:" + clazz.getName());
                                                     if (name == null || name.length() == 0) {
                                                         name = findAnnotationName(clazz);
                                                         if (name == null || name.length() == 0) {
